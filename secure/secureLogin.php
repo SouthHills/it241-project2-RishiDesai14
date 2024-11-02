@@ -1,6 +1,8 @@
 <?php
 require 'secureSession.php';
 
+$errors = [];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
     $username = $_POST["username"];
@@ -20,12 +22,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 }
 ?>
 
-<form method="post">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Login</title>
+</head>
+<body>
+<form action="secureLogin.php" method="post">
+    <h2>Secure Login</h2>
+
+    <?php if (!empty($errors)): ?>
+        <div style="color: red;">
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlentities($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
     <label for="username">Username:</label>
-    <input type="text" name="username" id="username" required />
+    <input type="text" id="username" name="username" required />
     <br />
     <label for="password">Password:</label>
-    <input type="password" name="password" id="password" required />
+    <input type="password" id="password" name="password" required />
     <br />
-    <button type="submit" value="Login">Submit</button>
+
+    <button type="submit">Login</button>
 </form>
+
+<p>Don't have an account? <a href="../register.php">Register here</a></p>
+
+</body>
+</html>
