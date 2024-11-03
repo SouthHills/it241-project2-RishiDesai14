@@ -3,21 +3,34 @@ require 'secureSession.php';
 
 $errors = [];
 
+if (isset($_SESSION['username']))
+{
+    header('Location: secureIndex.php'); // Redirect if already logged in
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
-    $username = $_POST["username"];
+    $username = trim($_POST["username"]);
     $password = $_POST["password"];
 
-    if ($username == "admin" && $password == "password")
+    if (isset($_SESSION['registered_username']) && isset($_SESSION['registered_password']))
     {
-        session_regenerate_id(true); //Regenerate session ID after login for added security
-        $_SESSION["username"] = $username;
-        header("Location: secureIndex.php");
-        exit();
+        if ($username === $_SESSION['registered_username'] && password_verify($password, $_SESSION['registered_password']))
+        {
+            session_regenerate_id(true); //Regenerate session ID after login for added security
+            $_SESSION["username"] = $username;
+            header("Location: secureIndex.php");
+            exit();
+        }
+        else
+        {
+            $errors[] = "Invalid username or password";
+        }
     }
     else
     {
-        echo "Invalid username or password";
+        $errors[] = "No registered users found.";
     }
 }
 ?>

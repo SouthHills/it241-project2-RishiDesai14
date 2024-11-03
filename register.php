@@ -1,12 +1,12 @@
 <?php
-if (session_status() == PHP_SESSION_ACTIVE)
+if (session_status() == PHP_SESSION_NONE)
 {
     session_start();
 }
 
 $errors = [];
 $successMessage = '';
-$isSecure = isset($_POST['secure']); // Check if secure registration is requested
+$isSecure = isset($_POST['secure']) && $_POST['secure'] == '1'; // Check if secure registration is requested
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
@@ -28,18 +28,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     }
 
     // Proceed with secure handling if secure registration is selected
-    if ($isSecure)
+    if (empty($errors))
     {
-        if (empty($errors))
+        if ($isSecure)
         {
             $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+            $_SESSION["registered_username"] = $username; // Store username
+            $_SESSION["registered_password"] = $passwordHash; // Store password
             $successMessage = "Registered successfully! (Secure registration)";
         }
-    }
-    else
-    {
-        if (empty($errors))
+        else
         {
+            $_SESSION["registered_username"] = $username;
+            $_SESSION["registered_password"] = $password;
             $successMessage = "Registered successfully! (Insecure registration)";
         }
     }
@@ -91,6 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 
         <button type="submit">Register</button>
     </form>
+
+    <p>Have an account? <a href="/insecure/insecureLogin.php">Insecure Login</a> or <a href="/secure/secureLogin.php">Secure Login</a></p>
 
 </body>
 </html>
