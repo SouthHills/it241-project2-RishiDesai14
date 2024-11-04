@@ -1,9 +1,9 @@
 # Secure and Insecure Authentication System
 
 ## Overview
-This project demonstrates a simple authentication system implemented in PHP, showcasing both secure and insecure methods of user login and registration. It serves as an educational example for understanding session management, password handling, and the best practices in web security.
+This project demonstrates a simple authentication system implemented in PHP, showcasing both secure and insecure methods of user login and registration. The purpose is for understanding session management, password handling, and the best practices in web security.
 
-The application consists of the following main features:
+The applications main features:
 - User registration with the option of secure or insecure password storage.
 - User login with session management.
 - Separate pages for secure and insecure login forms.
